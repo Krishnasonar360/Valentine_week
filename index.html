@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Love Journey ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff3366;
             --secondary: #ffccd5;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass: rgba(255, 255, 255, 0.35);
+            --glass-border: rgba(255, 255, 255, 0.6);
             --text-main: #590d22;
+            --paper-color: #fff0f5;
         }
 
         body {
@@ -27,16 +28,10 @@
             align-items: center;
         }
 
-        /* Background Animation Container */
         #particle-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
         }
 
         .container {
@@ -50,12 +45,11 @@
         h1 { 
             font-family: 'Dancing Script', cursive; 
             color: #c9184a; 
-            font-size: 3.5rem; 
+            font-size: 3rem; 
             margin-bottom: 10px;
             text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
         }
 
-        /* Glassmorphism Card Style */
         .glass-panel {
             background: var(--glass);
             backdrop-filter: blur(12px);
@@ -64,7 +58,8 @@
             border-radius: 24px;
             padding: 30px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: popIn 0.6s ease;
+            position: relative;
         }
 
         .page { display: none; }
@@ -75,111 +70,142 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Menu Grid */
+        /* Menu Grid (Only visible if not in Valentine Week) */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
 
         .menu-item {
-            background: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.5);
             border-radius: 15px;
-            padding: 15px;
+            padding: 10px;
             cursor: pointer;
             transition: 0.3s;
-            border: 1px solid transparent;
         }
+        .menu-item:hover { transform: translateY(-5px); background: white; }
+        .menu-icon { font-size: 1.8rem; display: block; }
 
-        .menu-item:hover {
-            background: white;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.2);
-        }
-
-        .menu-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
-        .menu-text { font-size: 0.9rem; font-weight: 600; }
-
-        /* Content Pages */
-        .big-icon { font-size: 6rem; display: inline-block; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)); }
+        /* Content Styles */
+        .big-icon { font-size: 5rem; display: inline-block; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)); }
         
         .message-box {
-            background: rgba(255,255,255,0.6);
-            padding: 25px;
+            background: rgba(255,255,255,0.7);
+            padding: 20px;
             border-radius: 15px;
-            margin: 20px 0;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            font-weight: 600;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            font-weight: 700;
         }
 
         .btn {
             background: #c9184a;
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 10px 25px;
             border-radius: 50px;
             font-size: 1rem;
             cursor: pointer;
             transition: 0.3s;
-            font-family: 'Nunito', sans-serif;
             box-shadow: 0 4px 15px rgba(201, 24, 74, 0.3);
+            margin: 10px;
         }
-
         .btn:hover { background: #a4133c; transform: scale(1.05); }
+        
+        /* Hide back button when date locked */
+        .btn-back { display: inline-block; }
 
-        /* --- ANIMATION CLASSES --- */
-        .particle {
+        /* --- ARROW ANIMATION --- */
+        .arrow-container {
+            margin-top: 25px;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            display: inline-block;
+        }
+        
+        .arrow-icon {
+            font-size: 3.5rem;
+            color: #c9184a;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            display: block;
+            margin-top: -5px;
+        }
+
+        .click-text {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            color: #590d22;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-15px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* --- LOVE LETTER OVERLAY --- */
+        #letter-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter-paper {
+            background: var(--paper-color);
+            width: 85%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            border: 2px dashed #c9184a;
+            position: relative;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .letter-paper.open { transform: scale(1); opacity: 1; }
+
+        .letter-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #800f2f;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .letter-close {
             position: absolute;
-            pointer-events: none;
-            z-index: 0;
+            top: 10px; right: 15px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #c9184a;
         }
 
-        /* 1. Falling Sway (Roses) */
-        @keyframes swayFall {
-            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 1; }
-            25% { transform: translateY(25vh) rotate(45deg) translateX(20px); }
-            50% { transform: translateY(50vh) rotate(0deg) translateX(-20px); }
-            75% { transform: translateY(75vh) rotate(-45deg) translateX(20px); }
-            100% { transform: translateY(110vh) rotate(0deg) translateX(0); opacity: 0; }
-        }
-
-        /* 2. Floating Up (Hearts/Balloons) */
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-
-        /* 3. Rain Down (Chocolates) */
-        @keyframes rainDrop {
-            0% { transform: translateY(-10vh); opacity: 1; }
-            100% { transform: translateY(110vh); opacity: 0; }
-        }
-
-        /* 4. Pop In and Fade (Kisses) */
-        @keyframes kissPop {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.5); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        /* 5. Wobble Float (Teddies) */
-        @keyframes wobbleFloat {
-            0% { transform: translateY(110vh) rotate(-10deg); opacity: 1; }
-            50% { transform: rotate(10deg); }
-            100% { transform: translateY(-10vh) rotate(-10deg); opacity: 0; }
-        }
-
-        /* Pulsing/Heartbeat Effect for Big Icons */
+        .hidden { display: none; }
         .pulse { animation: heartbeat 1.5s infinite; }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.3); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
-        }
+        @keyframes heartbeat { 0% { transform: scale(1); } 15% { transform: scale(1.3); } 30% { transform: scale(1); } 45% { transform: scale(1.15); } 60% { transform: scale(1); } }
+        
+        .particle { position: absolute; pointer-events: none; }
+        @keyframes swayFall { 0% { top: -10%; opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        @keyframes floatUp { 0% { bottom: -10%; opacity: 1; } 100% { bottom: 110%; opacity: 0; } }
+        @keyframes rainDrop { 0% { top: -10%; opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        @keyframes popMsg { 0% { transform: scale(0); } 100% { transform: scale(1); opacity: 0; } }
 
     </style>
 </head>
@@ -191,194 +217,280 @@
         
         <div id="index" class="page active glass-panel">
             <h1>Our Love Week</h1>
-            <p>Every day is special with you, but this week is extra magical.</p>
+            <p>Waiting for the special days...</p>
             <div class="menu-grid">
-                <div class="menu-item" onclick="navigate('rose')"><span class="menu-icon">🌹</span><span class="menu-text">Rose</span></div>
-                <div class="menu-item" onclick="navigate('propose')"><span class="menu-icon">💍</span><span class="menu-text">Propose</span></div>
-                <div class="menu-item" onclick="navigate('chocolate')"><span class="menu-icon">🍫</span><span class="menu-text">Choco</span></div>
-                <div class="menu-item" onclick="navigate('teddy')"><span class="menu-icon">🧸</span><span class="menu-text">Teddy</span></div>
-                <div class="menu-item" onclick="navigate('promise')"><span class="menu-icon">🤞</span><span class="menu-text">Promise</span></div>
-                <div class="menu-item" onclick="navigate('hug')"><span class="menu-icon">🫂</span><span class="menu-text">Hug</span></div>
-                <div class="menu-item" onclick="navigate('kiss')"><span class="menu-icon">💋</span><span class="menu-text">Kiss</span></div>
-                <div class="menu-item" onclick="navigate('valentine')"><span class="menu-icon">💝</span><span class="menu-text">Valentine</span></div>
+                <div class="menu-item" onclick="navigate('rose')"><span class="menu-icon">🌹</span> Rose</div>
+                <div class="menu-item" onclick="navigate('propose')"><span class="menu-icon">💍</span> Propose</div>
+                <div class="menu-item" onclick="navigate('chocolate')"><span class="menu-icon">🍫</span> Choco</div>
+                <div class="menu-item" onclick="navigate('teddy')"><span class="menu-icon">🧸</span> Teddy</div>
+                <div class="menu-item" onclick="navigate('promise')"><span class="menu-icon">🤞</span> Promise</div>
+                <div class="menu-item" onclick="navigate('hug')"><span class="menu-icon">🫂</span> Hug</div>
+                <div class="menu-item" onclick="navigate('kiss')"><span class="menu-icon">💋</span> Kiss</div>
+                <div class="menu-item" onclick="navigate('valentine')"><span class="menu-icon">💝</span> Valentine</div>
             </div>
         </div>
 
         <div id="rose" class="page glass-panel">
             <div class="big-icon pulse">🌹</div>
-            <h1>Happy Rose Day Pillu!</h1>
+            <h1>Happy Rose Day!</h1>
             <div class="message-box">
-                A single rose can be my garden... a single friend, my world. <br>
-                You are my rose, my world, and my everything.
+                You are the most beautiful rose in the garden of my life.
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+            <div class="arrow-container" onclick="openLetter('rose')">
+                <span class="click-text">Click Here</span><br>
+                <span class="arrow-icon">⬇️</span>
+            </div>
+            <br>
+            <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
         </div>
 
         <div id="propose" class="page glass-panel">
             <div class="big-icon pulse">💍</div>
-            <h1>Happy Propose Day Pillu!</h1>
+            <h1>Happy Propose Day!</h1>
             <div class="message-box">
-                I don't need a special date to say this, but today makes it official:<br>
-                Will you continue to make me the happiest person alive?
+                I don't need a ring to tell you that I want you forever.
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+            <div class="arrow-container" onclick="openLetter('propose')">
+                <span class="click-text">Click Here</span><br>
+                <span class="arrow-icon">⬇️</span>
+            </div>
+            <br>
+            <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
         </div>
 
         <div id="chocolate" class="page glass-panel">
             <div class="big-icon pulse">🍫</div>
-            <h1>Happy Chocolate Day Pillu!</h1>
+            <h1>Happy Chocolate Day!</h1>
             <div class="message-box">
-                Life is like a box of chocolates, but with you, I already know what I'm going to get:<br>
-                Pure Sweetness.
+                You are sweeter than any chocolate in this world.
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+            <div class="arrow-container" onclick="openLetter('chocolate')">
+                <span class="click-text">Click Here</span><br>
+                <span class="arrow-icon">⬇️</span>
+            </div>
+            <br>
+            <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
         </div>
 
         <div id="teddy" class="page glass-panel">
             <div class="big-icon pulse">🧸</div>
-            <h1>Happy Teddy Day Pillu!</h1>
+            <h1>Happy Teddy Day!</h1>
             <div class="message-box">
-                I'm sending this digital teddy to give you a big warm hug when I'm not there.<br>
-                (But I'm softer and better at cuddling!)
+                Sending you a bear-y big hug!
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+            <div class="arrow-container" onclick="openLetter('teddy')">
+                <span class="click-text">Click Here</span><br>
+                <span class="arrow-icon">⬇️</span>
+            </div>
+            <br>
+            <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
         </div>
 
         <div id="promise" class="page glass-panel">
             <div class="big-icon pulse">🤞</div>
-            <h1>Happy Promise Day Pillu!</h1>
+            <h1>Happy Promise Day!</h1>
             <div class="message-box">
-                I promise to laugh at your jokes, cook you pasta, and love you even when you're cranky.<br>
-                Forever and Always.
+                Promises are meant to be kept, and I promise to keep you happy.
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+            <div class="arrow-container" onclick="openLetter('promise')">
+                <span class="click-text">Click Here</span><br>
+                <span class="arrow-icon">⬇️</span>
+            </div>
+            <br>
+            <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
         </div>
 
         <div id="hug" class="page glass-panel">
             <div class="big-icon pulse">🫂</div>
-            <h1>Happy Hug Day Pillu!</h1>
+            <h1>Happy Hug Day!</h1>
             <div class="message-box">
-                There is a warm place that I know, where I am safe and loved.<br>
-                It is in your arms. Sending a tight squeeze!
+                A hug from you fixes everything.
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+            <div class="arrow-container" onclick="openLetter('hug')">
+                <span class="click-text">Click Here</span><br>
+                <span class="arrow-icon">⬇️</span>
+            </div>
+            <br>
+            <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
         </div>
 
         <div id="kiss" class="page glass-panel">
             <div class="big-icon pulse">💋</div>
-            <h1>Happy Kiss Day Pillu!</h1>
+            <h1>Happy Kiss Day!</h1>
             <div class="message-box">
-                Kissing you is like sipping the stars.<br>
-                Here is a virtual kiss for your forehead, your cheeks, and your lips.
+                Sending you a thousand virtual kisses.
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+            <div class="arrow-container" onclick="openLetter('kiss')">
+                <span class="click-text">Click Here</span><br>
+                <span class="arrow-icon">⬇️</span>
+            </div>
+            <br>
+            <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
         </div>
 
         <div id="valentine" class="page glass-panel">
             <div class="big-icon pulse">💝</div>
-            <h1>Happy Valentine's Day Pillu!</h1>
-            <div class="message-box">
-                You are my sun, my moon, and all my stars.<br>
-                Thank you for being my Valentine today and every day.
+            <h1>Happy Valentine's Day!</h1>
+            
+            <div id="val-question">
+                <div class="message-box">
+                    Will you be my Valentine Forever?
+                </div>
+                <button class="btn" onclick="handleYes()">YES! ❤️</button>
             </div>
-            <!--<button class="btn" onclick="navigate('index')">Back to Menu</button>-->
+
+            <div id="val-success" class="hidden">
+                <div class="message-box">
+                    Yay! I knew it! I love you! 🥰
+                </div>
+                <div class="arrow-container" onclick="openLetter('valentine')">
+                    <span class="click-text">Click Here</span><br>
+                    <span class="arrow-icon">⬇️</span>
+                </div>
+                <br>
+                <button class="btn btn-back" onclick="navigate('index')">Back to Menu</button>
+            </div>
         </div>
 
     </div>
 
+    <div id="letter-overlay">
+        <div class="letter-paper" id="letter-paper">
+            <span class="letter-close" onclick="closeLetter()">&times;</span>
+            <div id="letter-content" class="letter-text"></div>
+            <div style="text-align: right; font-family: 'Dancing Script'; font-size: 1.5rem; margin-top: 20px;">
+                - Yours Always ❤️
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Configuration for Animations per Day
+        // --- CUSTOM MESSAGES ---
+        const letters = {
+            'rose': "My Dearest Pillu,<br><br>Just like a rose spreads its fragrance, you have filled my life with the smell of love. You are softer than petals and more beautiful than any flower in this world. 🌹<br><br>I love you!",
+            'propose': "My Love,<br><br>Today I want to confess something... My life was incomplete until you walked into it. You are the missing puzzle piece I was looking for. Will you stay with me, hold my hand, and walk this journey called life together? 💍",
+            'chocolate': "Sweetheart,<br><br>No chocolate is sweeter than your smile, and no candy is more addictive than your voice. You bring sweetness to my boring days. Life with you is simply delicious! 🍫",
+            'teddy': "My Cutie,<br><br>I wish I could be there to hold you tight right now. But until then, let this virtual teddy remind you that I am always here to protect you, love you, and be your soft place to fall. 🧸",
+            'promise': "My Darling,<br><br>I promise to be your strength when you are weak, your smile when you are sad, and your calm when you are angry. I promise to love you more everyday. 🤞",
+            'hug': "Baby,<br><br>Sometimes words are not enough, and all I want is to wrap my arms around you and never let go. Your hug is my home. Sending you the tightest squeeze ever! 🫂",
+            'kiss': "My Love,<br><br>Your lips are my favorite sweet, and your kiss is my favorite feeling. Here is a kiss on your forehead to show respect, and a kiss on your lips to show my passion. 💋",
+            'valentine': "To My Forever Valentine,<br><br>You are my sun, my moon, and all my stars. From the moment we met, I knew you were special. Thank you for choosing me. I will love you until my last breath. Happy Valentine's Day! ❤️❤️❤️"
+        };
+
         const configs = {
-            'index': { emoji: '❤️', type: 'float', interval: 400 },
-            'rose': { emoji: '🌹', type: 'sway', interval: 300 },
-            'propose': { emoji: '💍', type: 'float', interval: 500 },
-            'chocolate': { emoji: '🍫', type: 'rain', interval: 200 },
-            'teddy': { emoji: '🧸', type: 'wobble', interval: 600 },
-            'promise': { emoji: '✨', type: 'float', interval: 300 },
-            'hug': { emoji: '🤗', type: 'float', interval: 400 },
-            'kiss': { emoji: '💋', type: 'pop', interval: 300 },
-            'valentine': { emoji: '💖', type: 'float', interval: 150 }
+            'index': { emoji: '❤️', type: 'float' },
+            'rose': { emoji: '🌹', type: 'sway' },
+            'propose': { emoji: '💍', type: 'float' },
+            'chocolate': { emoji: '🍫', type: 'rain' },
+            'teddy': { emoji: '🧸', type: 'float' },
+            'promise': { emoji: '✨', type: 'float' },
+            'hug': { emoji: '🤗', type: 'float' },
+            'kiss': { emoji: '💋', type: 'rain' },
+            'valentine': { emoji: '💖', type: 'float' }
         };
 
         let animationInterval = null;
 
         function navigate(pageId) {
-            // Hide all pages
+            // Valentine Reset
+            if(pageId === 'valentine') {
+                document.getElementById('val-question').classList.remove('hidden');
+                document.getElementById('val-success').classList.add('hidden');
+            }
+
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Show target page
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0,0);
-
-            // Start specific animation
             startAnimation(pageId);
         }
 
+        function openLetter(day) {
+            document.getElementById('letter-content').innerHTML = letters[day];
+            const overlay = document.getElementById('letter-overlay');
+            const paper = document.getElementById('letter-paper');
+            overlay.style.display = 'flex';
+            setTimeout(() => { paper.classList.add('open'); }, 50);
+            startAnimation('index'); 
+        }
+
+        function closeLetter() {
+            document.getElementById('letter-paper').classList.remove('open');
+            setTimeout(() => { document.getElementById('letter-overlay').style.display = 'none'; }, 500);
+        }
+
+        function handleYes() {
+            document.getElementById('val-question').classList.add('hidden');
+            document.getElementById('val-success').classList.remove('hidden');
+            for(let i=0; i<30; i++) createParticle('😍', 'rain');
+        }
+
         function startAnimation(pageId) {
-            // Clear existing animation
             const container = document.getElementById('particle-container');
             container.innerHTML = '';
             if (animationInterval) clearInterval(animationInterval);
-
-            // Get config or default to hearts
             const config = configs[pageId] || configs['index'];
-
-            animationInterval = setInterval(() => {
-                createParticle(config.emoji, config.type);
-            }, config.interval);
+            animationInterval = setInterval(() => { createParticle(config.emoji, config.type); }, 300);
         }
 
         function createParticle(emoji, type) {
             const particle = document.createElement('div');
             particle.classList.add('particle');
             particle.innerText = emoji;
-            
-            // Random positioning
             particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.fontSize = (Math.random() * 20 + 20) + 'px';
-            
-            // Apply specific animation style
-            if (type === 'sway') {
-                particle.style.animation = `swayFall ${Math.random() * 2 + 3}s linear`;
-                particle.style.top = '-10vh';
-            } else if (type === 'rain') {
-                particle.style.animation = `rainDrop ${Math.random() * 1 + 2}s linear`;
-                particle.style.top = '-10vh';
-            } else if (type === 'wobble') {
-                particle.style.animation = `wobbleFloat ${Math.random() * 3 + 4}s linear`;
-                particle.style.bottom = '-10vh';
-            } else if (type === 'pop') {
-                particle.style.animation = `kissPop ${Math.random() * 1 + 1}s ease-out`;
-                particle.style.top = Math.random() * 100 + 'vh';
-                particle.style.left = Math.random() * 100 + 'vw';
-            } else {
-                // Default Float
-                particle.style.animation = `floatUp ${Math.random() * 3 + 4}s linear`;
-                particle.style.bottom = '-10vh';
-            }
-
+            particle.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            if (type === 'sway') particle.style.animation = `swayFall ${Math.random() * 2 + 3}s linear`;
+            else if (type === 'rain') particle.style.animation = `rainDrop ${Math.random() * 2 + 2}s linear`;
+            else particle.style.animation = `floatUp ${Math.random() * 3 + 4}s linear`;
             document.getElementById('particle-container').appendChild(particle);
-
-            // Cleanup after animation finishes
-            setTimeout(() => {
-                particle.remove();
-            }, 6000);
+            setTimeout(() => { particle.remove(); }, 6000);
         }
 
-        // Auto-detect date on load
+        // ============================================
+        // STRICT DATE LOGIC (Important!)
+        // ============================================
         window.onload = function() {
-            const valentineMap = {
-                7: 'rose', 8: 'propose', 9: 'chocolate',
-                10: 'teddy', 11: 'promise', 12: 'hug',
-                13: 'kiss', 14: 'valentine'
-            };
             
-            const today = new Date();
-            const date = today.getDate();
-            const month = today.getMonth() + 1;
+            // --- TESTING: Isko 'null' rakhein real date ke liye ---
+            // Agar aap check karna chahte hai ki 7th ko kaisa dikhega, 
+            // toh niche 'null' hata kar 7 likh dein (e.g., const debugDate = 7;)
+            const debugDate = null; 
+            // ----------------------------------------------------
 
-            if (month === 2 && valentineMap[date]) {
-                navigate(valentineMap[date]);
+            const today = new Date();
+            const currentMonth = today.getMonth() + 1; // Feb is 2
+            let currentDate = today.getDate();
+
+            // Override for testing if debugDate is set
+            if (debugDate !== null) {
+                currentDate = debugDate;
+            }
+
+            const dayMap = {
+                7: 'rose',
+                8: 'propose',
+                9: 'chocolate',
+                10: 'teddy',
+                11: 'promise',
+                12: 'hug',
+                13: 'kiss',
+                14: 'valentine'
+            };
+
+            // Logic: Agar Feb hai aur date 7 se 14 ke beech hai
+            if ((currentMonth === 2 || debugDate !== null) && dayMap[currentDate]) {
+                
+                // 1. Navigate directly to that day's page
+                const targetPage = dayMap[currentDate];
+                navigate(targetPage);
+
+                // 2. Hide all "Back to Menu" buttons (LOCK THE USER)
+                const backButtons = document.querySelectorAll('.btn-back');
+                backButtons.forEach(btn => {
+                    btn.style.display = 'none'; 
+                });
+
             } else {
+                // Agar date 7-14 Feb nahi hai, toh Menu dikhao
                 navigate('index');
             }
         };
